@@ -10,13 +10,9 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
-  // Глобальный префикс для всех REST-эндпоинтов: /api/...
   app.setGlobalPrefix('api', {
-    // socket.io gateway живёт на /events — исключать не нужно, т.к. префикс
-    // применяется только к HTTP-роутам.
   });
 
-  // CORS для REST. WebSocket CORS настраивается отдельно в EventsGateway.
   const rawOrigins = process.env.CORS_ORIGINS ?? 'http://localhost:5173';
   const origins = rawOrigins
     .split(',')
@@ -27,7 +23,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Глобальная валидация: отбрасывать неизвестные поля, приводить типы.
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

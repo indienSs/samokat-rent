@@ -27,7 +27,6 @@ export class SeedService implements OnModuleInit {
     await this.seedAdmin();
     const seeded = await this.seedDemoData();
     if (seeded) {
-      // Дать фронтенду знать, что данные появились (если он подключился рано).
       this.events.emitScooterChanged({ action: 'updated', scooter: {} });
     }
   }
@@ -64,7 +63,6 @@ export class SeedService implements OnModuleInit {
       return false;
     }
 
-    // Координаты — центр Москвы (демо). Раскидаем самокаты вокруг.
     const center = { lat: 55.751244, lng: 37.618423 };
 
     const scooterDefs: Array<{
@@ -107,14 +105,13 @@ export class SeedService implements OnModuleInit {
       customerDefs.map((c) => this.customers.create(c)),
     );
 
-    // Одна активная аренда для SC-003 (in_use).
     const inUse = scooters.find((s) => s.number === 'SC-003');
     if (inUse) {
       await this.rentals.save(
         this.rentals.create({
           scooterId: inUse.id,
           customerId: customers[0].id,
-          startedAt: new Date(Date.now() - 25 * 60 * 1000), // 25 минут назад
+          startedAt: new Date(Date.now() - 25 * 60 * 1000),
           status: RentalStatus.ACTIVE,
         }),
       );

@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-samokat}
       POSTGRES_DB: ${POSTGRES_DB:-samokat_rent}
     ports:
-      - "5433:5432" # 5433 на хосте, чтобы не конфликтовать с локальным PG
+      - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:

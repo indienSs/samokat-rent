@@ -26,7 +26,6 @@ import { PublicAuthGuard } from './public-auth.guard';
   providers: [
     AuthService,
     JwtStrategy,
-    // Глобальная защита всех эндпоинтов JWT, кроме помеченных @Public().
     { provide: APP_GUARD, useClass: PublicAuthGuard },
   ],
   controllers: [AuthController],

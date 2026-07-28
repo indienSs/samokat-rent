@@ -39,7 +39,6 @@ export class AnalyticsService {
       0,
     );
 
-    // Средний заряд (NULL-safe): если самокатов нет — 0.
     const avgRow = await this.scooters
       .createQueryBuilder('s')
       .select('COALESCE(AVG(s.battery_level), 0)', 'avg')

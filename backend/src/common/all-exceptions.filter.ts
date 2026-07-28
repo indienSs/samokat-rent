@@ -35,7 +35,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
         error = (r.error as string | undefined) ?? error;
       }
     } else {
-      // Непредвиденная ошибка — логируем стек, клиенту не светим детали.
       this.logger.error(
         exception instanceof Error ? exception.stack : String(exception),
       );
