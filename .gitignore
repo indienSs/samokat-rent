@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Builds
+dist/
+build/
+*/dist/
+*/build/
+
+# Env
+.env
+*/.env
+!.env.example
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+
+# ZCode agent artifacts
+.zcode/
+
+# Coverage / caches
+coverage/
+.cache/
+.npm/
+
+# Typeorm
+*/src/**/*.js
+
+# TypeScript incremental build cache
+*.tsbuildinfo

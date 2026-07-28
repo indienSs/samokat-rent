@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: samokat-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-samokat}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-samokat}
+      POSTGRES_DB: ${POSTGRES_DB:-samokat_rent}
+    ports:
+      - "5433:5432" # 5433 на хосте, чтобы не конфликтовать с локальным PG
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-samokat} -d ${POSTGRES_DB:-samokat_rent}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: samokat-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-samokat}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-samokat}
+      POSTGRES_DB: ${POSTGRES_DB:-samokat_rent}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://localhost:5173}
+      JWT_SECRET: ${JWT_SECRET:-super-secret-change-me}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-12h}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@example.com}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-admin123}
+      SEED_ADMIN_NAME: ${SEED_ADMIN_NAME:-Admin}
+      SYNC_SCHEMA: "true"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: samokat-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  db_data:
