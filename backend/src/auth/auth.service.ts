@@ -35,7 +35,7 @@ export class AuthService {
   async login(dto: LoginDto): Promise<AuthResult> {
     const user = await this.users
       .createQueryBuilder('u')
-      .addSelect('u.password_hash')
+      .addSelect('u.passwordHash')
       .where('u.email = :email', { email: dto.email })
       .getOne();
 

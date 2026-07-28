@@ -36,7 +36,7 @@ export class ScootersService {
       qb.andWhere('s.battery_level <= :max', { max: query.maxBattery });
     }
 
-    qb.orderBy('s."updatedAt"', 'DESC');
+    qb.orderBy('s.updatedAt', 'DESC');
     return qb.getMany();
   }
 
