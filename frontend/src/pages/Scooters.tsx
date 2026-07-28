@@ -164,7 +164,7 @@ export function Scooters() {
             <Space size={4}>
               <EnvironmentOutlined />
               <span style={{ fontSize: 12 }}>
-                {r.lat.toFixed(4)}, {r.lng.toFixed(4)}
+                {Number(r.lat).toFixed(4)}, {Number(r.lng).toFixed(4)}
               </span>
             </Space>
           </Tooltip>

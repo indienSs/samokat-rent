@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ScooterStatus } from '../common/enums';
+import { NumericTransformer } from '../common/numeric.transformer';
 
 @Entity('scooters')
 export class Scooter {
@@ -24,10 +25,10 @@ export class Scooter {
   @Column({ name: 'battery_level', type: 'int', default: 100 })
   batteryLevel: number;
 
-  @Column({ type: 'numeric', precision: 9, scale: 6 })
+  @Column({ type: 'numeric', precision: 9, scale: 6, transformer: new NumericTransformer() })
   lat: number;
 
-  @Column({ type: 'numeric', precision: 9, scale: 6 })
+  @Column({ type: 'numeric', precision: 9, scale: 6, transformer: new NumericTransformer() })
   lng: number;
 
   @CreateDateColumn({ name: 'created_at' })

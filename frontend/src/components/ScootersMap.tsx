@@ -31,13 +31,15 @@ interface Props {
   onSelect?: (scooter: Scooter) => void;
 }
 
+const toNum = (v: number | string): number => Number(v);
+
 export function ScootersMap({ scooters, onSelect }: Props) {
   const center = useMemo<[number, number]>(() => {
     if (scooters.length === 0) {
       return [55.751244, 37.618423];
     }
     const sum = scooters.reduce(
-      (acc, s) => [acc[0] + s.lat, acc[1] + s.lng],
+      (acc, s) => [acc[0] + toNum(s.lat), acc[1] + toNum(s.lng)],
       [0, 0],
     );
     return [sum[0] / scooters.length, sum[1] / scooters.length];
@@ -55,10 +57,13 @@ export function ScootersMap({ scooters, onSelect }: Props) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {scooters.map((s) => (
+        {scooters.map((s) => {
+          const lat = toNum(s.lat);
+          const lng = toNum(s.lng);
+          return (
           <Marker
             key={s.id}
-            position={[s.lat, s.lng]}
+            position={[lat, lng]}
             icon={buildIcon(s.status, s.batteryLevel)}
             eventHandlers={{
               click: () => onSelect?.(s),
@@ -71,12 +76,13 @@ export function ScootersMap({ scooters, onSelect }: Props) {
                 {SCOOTER_STATUS_META[s.status].label}, заряд {s.batteryLevel}%
                 <br />
                 <span style={{ fontSize: 11, color: '#888' }}>
-                  {s.lat.toFixed(5)}, {s.lng.toFixed(5)}
+                  {lat.toFixed(5)}, {lng.toFixed(5)}
                 </span>
               </div>
             </Popup>
           </Marker>
-        ))}
+          );
+        })}
       </MapContainer>
       {scooters.length === 0 && (
         <div
